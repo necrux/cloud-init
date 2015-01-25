@@ -35,7 +35,7 @@ runcmd:
   - service sshd restart
   - service iptables restart
   - echo 'smtp_sasl_security_options = noanonymous' >> /etc/postfix/main.cf
-  - echo 'smtp_sasl_password_maps = static:postmaster@__doamain__:__password__' >> /etc/postfix/main.cf
+  - echo 'smtp_sasl_password_maps = static:postmaster@__domain__:__password__' >> /etc/postfix/main.cf
   - echo 'relayhost = smtp.mailgun.org' >> /etc/postfix/main.cf
   - echo 'smtp_sasl_auth_enable = yes' >> /etc/postfix/main.cf
 
