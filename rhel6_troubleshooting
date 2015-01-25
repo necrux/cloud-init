@@ -17,10 +17,10 @@ packages:
   - git 
   - httpd
   - mysql-server
-  - php54
-  - php54-mysql
-  - php54-gd
-  - php54-mcrypt
+  - php
+  - php-mysql
+  - php-gd
+  - php-mcrypt
 
 runcmd:
   - rpm -i http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-13.ius.centos6.noarch.rpm
@@ -33,9 +33,10 @@ runcmd:
   - mysql -e "DROP DATABASE test;"
   - mysql -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%'"
   - mysql -e "UPDATE mysql.user SET Password=PASSWORD('super$ecurepasswd') WHERE User='root';"
-  - mysql -e "CREATE DATABASE $WPDB;"
-  - mysql -e "GRANT ALL ON $WPDB.* TO '$WPUSER'@'localhost' IDENTIFIED BY '$WPpwd';"
   - mysql -e "flush privileges;"
+  - echo '[client]' > /root/.my.cnf
+  - echo 'user=root' >> /root/.my.cnf
+  - echo 'password=super$ecurepasswd' >> /root/.my.cnf
   - sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
   - sed -i 's/#Port 22/Port __ssh-port__/g' /etc/ssh/sshd_config
   - sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
@@ -149,14 +150,6 @@ write_files:
     owner: root:root
     path: /usr/local/bin/dynmotd
     permissions: '0755'
--   encoding: ASCII
-    content: |
-       [client]
-       user=root
-       password=super$ecurepasswd
-    owner: root:root
-    path: /root/.my.cnf
-    permissions: '0644'
 -   encoding: ASCII
     content: |
        <VirtualHost *:80>
