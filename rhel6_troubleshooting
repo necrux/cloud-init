@@ -16,7 +16,7 @@ packages:
   - dig
   - git 
   - httpd
-  - mysqld-server
+  - mysql-server
   - php54
   - php54-mysql
   - php54-gd
@@ -155,7 +155,7 @@ write_files:
        user=root
        password=super$ecurepasswd
     owner: root:root
-    path: /etc/profile.d/ps.sh
+    path: /root/.my.cnf
     permissions: '0644'
 -   encoding: ASCII
     content: |
