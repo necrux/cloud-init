@@ -6,6 +6,8 @@ users:
    lock-passwd: false
    ssh-authorized-keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCryHk9HafLVLhLgVZQBlqNS/gUNfO2lPGTCm+csDUDURz6G3cvlSQsYs4jf8yeRMGmoXM6pzpTyhuMeFiUwVbp6V9jvFSl0mQPARaa4eJWVhmdOThQ2/O5mXCIYbUMWR3XIbuTy4C8YchTnSOazmo8QU1GZ6J7mJzvT88v1hoZMaozWm5dv3KcdIeVvroFfcesDL6wU8qx36Y5UvSr8L1RvELNkf1O0/cP58ErtMzYkwrhNbtXXMulRipxTOFVq5Esqu+USFnNWTIYMxInMDiUNmVdKhG2qn1kbwyhnbHjY5I6ODV1MrsY2Ckeu8Mtq7X/xDYITICldsKRjryLhi+n
+ - name: dave
+   lock-passwd: false
 
 packages:
   - vim
@@ -25,8 +27,15 @@ runcmd:
   - yum update -y
   - chkconfig httpd on
   - chkconfig mysqld on
-  - service httpd start
   - service mysqld start
+  - mysql -e "DELETE FROM mysql.user WHERE User='';"
+  - mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
+  - mysql -e "DROP DATABASE test;"
+  - mysql -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%'"
+  - mysql -e "UPDATE mysql.user SET Password=PASSWORD('super$ecurepasswd') WHERE User='root';"
+  - mysql -e "CREATE DATABASE $WPDB;"
+  - mysql -e "GRANT ALL ON $WPDB.* TO '$WPUSER'@'localhost' IDENTIFIED BY '$WPpwd';"
+  - mysql -e "flush privileges;"
   - sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
   - sed -i 's/#Port 22/Port __ssh-port__/g' /etc/ssh/sshd_config
   - sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
@@ -35,6 +44,7 @@ runcmd:
   - sed -i 's/HISTSIZE=1000/HISTSIZE=10000/' /etc/profile
   - echo $(pwgen -cv1 32)|passwd root --stdin
   - echo $(pwgen -cv1 32)|passwd __user__ --stdin
+  - echo $(pwgen -cv1 32)|passwd dave --stdin
   - curl -s "http://artii.herokuapp.com/make?text=$HOSTNAME&font=bubble__" > /etc/motd_hostname
   - echo >> /etc/motd_hostname
   - sed -i 's/#PrintMotd yes/PrintMotd no/g' /etc/ssh/sshd_config
@@ -45,6 +55,41 @@ runcmd:
   - echo 'smtp_sasl_password_maps = static:postmaster@__doamain__:__password__' >> /etc/postfix/main.cf
   - echo 'relayhost = smtp.mailgun.org' >> /etc/postfix/main.cf
   - echo 'smtp_sasl_auth_enable = yes' >> /etc/postfix/main.cf
+  - echo 'Include vhost.d/*.conf' >> /etc/httpd/conf/httpd.conf
+  - mkdir /etc/httpd/vhost.d/
+  - mkdir -p /var/www/vhosts/wordpress.__DOMAIN__.com/
+  - wget https://wordpress.org/latest.tar.gz
+  - tar xzf latest.tar.gz -C /var/www/vhosts/wordpress.__DOMAIN__.com/
+  - mv /var/www/vhosts/wordpress.__DOMAIN__.com/wordpress/* /var/www/vhosts/wordpress.__DOMAIN__.com/
+  - rm -f latest.tar.gz
+  - mv wordpress/* /var/www/vhosts/wordpress.__DOMAIN__.com/
+  - rmdir /var/www/vhosts/wordpress.__DOMAIN__.com/wordpress/
+  - mysql -e "create database wordpress;"
+  - mysql -e "grant all on wordpress.* to 'wordpress_user'@'localhost' identified by 'wordpress-lover';"
+  - mkdir -p /var/www/vhosts/magento.__DOMAIN__.com/
+  - wget http://www.magentocommerce.com/downloads/assets/1.9.0.1/magento-1.9.0.1.tar.gz
+  - wget http://www.magentocommerce.com/downloads/assets/1.9.0.0/magento-sample-data-1.9.0.0.tar.gz
+  - tar zxf magento-1.9.0.1.tar.gz -C /var/www/vhosts/magento.__DOMAIN__.com/
+  - mv /var/www/vhosts/magento.__DOMAIN__.com/magento/* /var/www/vhosts/magento.__DOMAIN__.com/
+  - mv /var/www/vhosts/magento.__DOMAIN__.com/magento/.htaccess /var/www/vhosts/magento.__DOMAIN__.com/
+  - rmdir /var/www/vhosts/magento.__DOMAIN__.com/magento/
+  - tar zxf magento-sample-data-1.9.0.0.tar.gz -C /var/www/vhosts/magento.__DOMAIN__.com/
+  - mv /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/media/* /var/www/vhosts/magento.__DOMAIN__.com/ 
+  - mv /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/media/.htaccess /var/www/vhosts/magento.__DOMAIN__.com/media/ 
+  - mv /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/skin/* /var/www/vhosts/magento.__DOMAIN__.com/
+  - mysql -e "create database magento;"
+  - mysql -e "grant all on magento.* to 'magento_user'@'localhost' identified by 'magento-lover';"
+  - cat /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/magento_sample_data_for_1.9.0.0.sql|mysql magento
+  - rm -rf /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/
+  - mkdir -p /var/www/vhosts/rackspace.__DOMAIN__.com/
+  - wget http://joomlacode.org/gf/download/frsrelease/19823/161246/Joomla_3.3.6-Stable-Update_Package.tar.gz
+  - tar zxf Joomla_3.3.6-Stable-Update_Package.tar.gz -C /var/www/vhosts/rackspace.__DOMAIN__.com/ 
+  - rm -f Joomla_3.3.6-Stable-Update_Package.tar.gz
+  - mysql -e "create database rackspace;"
+  - mysql -e "grant all on rackspace.* to 'rackspace_user'@'localhost' identified by 'joomla-lover';"
+  - mysql -e "flush privileges;"
+  - chown -R apache:apache /var/www/vhosts/*
+  - service httpd start
 
 write_files:
 -   encoding: ASCII
@@ -104,3 +149,59 @@ write_files:
     owner: root:root
     path: /usr/local/bin/dynmotd
     permissions: '0755'
+-   encoding: ASCII
+    content: |
+       [client]
+       user=root
+       password=super$ecurepasswd
+    owner: root:root
+    path: /etc/profile.d/ps.sh
+    permissions: '0644'
+-   encoding: ASCII
+    content: |
+       <VirtualHost *:80>
+           ServerName wordpress.__DOMAIN__.com
+           ServerAlias www.wordpress.__DOMAIN__.com
+           DocumentRoot /var/www/vhosts/wordpress.__DOMAIN__.com
+           CustomLog /var/log/httpd/access_wordpress.__DOMAIN__.com.log combined
+           ErrorLog /var/log/httpd/error_wordpress.__DOMAIN__.com.log
+           <Directory /var/www/vhosts/wordpress.__DOMAIN__.com>
+               Options +FollowSymlinks -Indexes
+               AllowOverride All
+           </Directory>
+       </VirtualHost>
+    owner: root:root
+    path: /etc/httpd/vhost.d/wordpress.__DOMAIN__.com
+    permissions: '0644'
+-   encoding: ASCII
+    content: |
+       <VirtualHost *:80>
+           ServerName magento.__DOMAIN__.com
+           ServerAlias www.magento.__DOMAIN__.com
+           DocumentRoot /var/www/vhosts/magento.__DOMAIN__.com
+           CustomLog /var/log/httpd/access_magento.__DOMAIN__.com.log combined
+           ErrorLog /var/log/httpd/error_magento.__DOMAIN__.com.log
+           <Directory /var/www/vhosts/magento.__DOMAIN__.com>
+               Options +FollowSymlinks -Indexes
+               AllowOverride All
+           </Directory>
+       </VirtualHost>
+    owner: root:root
+    path: /etc/httpd/vhost.d/magento.__DOMAIN__.com
+    permissions: '0644'
+-   encoding: ASCII
+    content: |
+       <VirtualHost *:80>
+           ServerName rackspace.__DOMAIN__.com
+           ServerAlias www.rackspace.__DOMAIN__.com
+           DocumentRoot /var/www/vhosts/rackspace.__DOMAIN__.com
+           CustomLog /var/log/httpd/access_rackspace.__DOMAIN__.com.log combined
+           ErrorLog /var/log/httpd/error_rackspace.__DOMAIN__.com.log
+           <Directory /var/www/vhosts/rackspace.__DOMAIN__.com>
+               Options +FollowSymlinks -Indexes
+               AllowOverride All
+           </Directory>
+       </VirtualHost>
+    owner: root:root
+    path: /etc/httpd/vhost.d/rackspace.__DOMAIN__.com
+    permissions: '0644'
