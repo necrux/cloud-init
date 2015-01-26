@@ -25,15 +25,15 @@ runcmd:
   - chkconfig httpd on
   - chkconfig mysqld on
   - service mysqld start
+  - echo '[client]' > /root/.my.cnf
+  - echo 'user=root' >> /root/.my.cnf
+  - echo "password=$(pwgen -cv1 32)" >> /root/.my.cnf
   - mysql -e "DELETE FROM mysql.user WHERE User='';"
   - mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
   - mysql -e "DROP DATABASE test;"
   - mysql -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%'"
-  - mysql -e "UPDATE mysql.user SET Password=PASSWORD('_supersecurepasswd_') WHERE User='root';"
+  - mysql -e "UPDATE mysql.user SET Password=PASSWORD('$(awk -F= '/password/ {print $2}' /root/.my.cnf)') WHERE User='root';"
   - mysql -e "flush privileges;"
-  - echo '[client]' > /root/.my.cnf
-  - echo 'user=root' >> /root/.my.cnf
-  - echo 'password=_supersecurepasswd_' >> /root/.my.cnf
   - sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
   - sed -i 's/#Port 22/Port __ssh-port__/g' /etc/ssh/sshd_config
   - sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
@@ -53,7 +53,9 @@ runcmd:
   - echo 'smtp_sasl_password_maps = static:postmaster@__domain__:__password__' >> /etc/postfix/main.cf
   - echo 'relayhost = smtp.mailgun.org' >> /etc/postfix/main.cf
   - echo 'smtp_sasl_auth_enable = yes' >> /etc/postfix/main.cf
+  - echo 'ServerName localhost' >> /etc/httpd/conf/httpd.conf
   - echo 'Include vhost.d/*.conf' >> /etc/httpd/conf/httpd.conf
+  - sed -i 's/#NameVirtualHost/NameVirtualHost/' /etc/httpd/conf/httpd.conf
   - mkdir /etc/httpd/vhost.d/
   - mkdir -p /var/www/vhosts/wordpress.__DOMAIN__.com/
   - wget https://wordpress.org/latest.tar.gz
@@ -62,8 +64,8 @@ runcmd:
   - rm -f latest.tar.gz
   - mv wordpress/* /var/www/vhosts/wordpress.__DOMAIN__.com/
   - rmdir /var/www/vhosts/wordpress.__DOMAIN__.com/wordpress/
-  - mysql -e "create database wordpress;"
-  - mysql -e "grant all on wordpress.* to 'wordpress_user'@'localhost' identified by 'wordpress-lover';"
+  - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "create database wordpress;"
+  - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "grant all on wordpress.* to 'wordpress_user'@'localhost' identified by 'wordpress-lover';"
   - mkdir -p /var/www/vhosts/magento.__DOMAIN__.com/
   - wget http://www.magentocommerce.com/downloads/assets/1.9.0.1/magento-1.9.0.1.tar.gz
   - wget http://www.magentocommerce.com/downloads/assets/1.9.0.0/magento-sample-data-1.9.0.0.tar.gz
@@ -75,17 +77,17 @@ runcmd:
   - mv /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/media/* /var/www/vhosts/magento.__DOMAIN__.com/ 
   - mv /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/media/.htaccess /var/www/vhosts/magento.__DOMAIN__.com/media/ 
   - mv /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/skin/* /var/www/vhosts/magento.__DOMAIN__.com/
-  - mysql -e "create database magento;"
-  - mysql -e "grant all on magento.* to 'magento_user'@'localhost' identified by 'magento-lover';"
-  - cat /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/magento_sample_data_for_1.9.0.0.sql|mysql magento
+  - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "create database magento;"
+  - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "grant all on magento.* to 'magento_user'@'localhost' identified by 'magento-lover';"
+  - cat /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/magento_sample_data_for_1.9.0.0.sql|mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) magento
   - rm -rf /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/
   - mkdir -p /var/www/vhosts/rackspace.__DOMAIN__.com/
   - wget http://joomlacode.org/gf/download/frsrelease/19823/161246/Joomla_3.3.6-Stable-Update_Package.tar.gz
   - tar zxf Joomla_3.3.6-Stable-Update_Package.tar.gz -C /var/www/vhosts/rackspace.__DOMAIN__.com/ 
   - rm -f Joomla_3.3.6-Stable-Update_Package.tar.gz
-  - mysql -e "create database rackspace;"
-  - mysql -e "grant all on rackspace.* to 'rackspace_user'@'localhost' identified by 'joomla-lover';"
-  - mysql -e "flush privileges;"
+  - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "create database rackspace;"
+  - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "grant all on rackspace.* to 'rackspace_user'@'localhost' identified by 'joomla-lover';"
+  - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "flush privileges;"
   - chown -R apache:apache /var/www/vhosts/*
   - service httpd start
 
