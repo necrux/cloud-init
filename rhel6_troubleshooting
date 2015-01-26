@@ -21,7 +21,7 @@ packages:
 
 runcmd:
   - rpm -i http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-13.ius.centos6.noarch.rpm
-  - yum install php54 php54-mysql php54-gd php54-mcrypt -y
+  - yum install php54 php54-mysql php54-gd php54-mcrypt php54-pecl-apc -y
   - yum update -y
   - chkconfig httpd on
   - chkconfig mysqld on
