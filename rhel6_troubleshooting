@@ -10,6 +10,7 @@ users:
    lock-passwd: false
 
 packages:
+  - man
   - vim
   - pwgen
   - telnet
