@@ -8,6 +8,7 @@ users:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCryHk9HafLVLhLgVZQBlqNS/gUNfO2lPGTCm+csDUDURz6G3cvlSQsYs4jf8yeRMGmoXM6pzpTyhuMeFiUwVbp6V9jvFSl0mQPARaa4eJWVhmdOThQ2/O5mXCIYbUMWR3XIbuTy4C8YchTnSOazmo8QU1GZ6J7mJzvT88v1hoZMaozWm5dv3KcdIeVvroFfcesDL6wU8qx36Y5UvSr8L1RvELNkf1O0/cP58ErtMzYkwrhNbtXXMulRipxTOFVq5Esqu+USFnNWTIYMxInMDiUNmVdKhG2qn1kbwyhnbHjY5I6ODV1MrsY2Ckeu8Mtq7X/xDYITICldsKRjryLhi+n
 
 packages:
+  - man
   - vim
   - pwgen
   - telnet
