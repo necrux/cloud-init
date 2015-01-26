@@ -40,6 +40,7 @@ runcmd:
   - echo 'smtp_sasl_password_maps = static:postmaster@__domain__:__password__' >> /etc/postfix/main.cf
   - echo 'relayhost = smtp.mailgun.org' >> /etc/postfix/main.cf
   - echo 'smtp_sasl_auth_enable = yes' >> /etc/postfix/main.cf
+  - service postfix restart
 
 write_files:
 -   encoding: text/plain
