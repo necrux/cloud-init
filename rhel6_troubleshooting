@@ -17,13 +17,10 @@ packages:
   - git 
   - httpd
   - mysql-server
-  - php
-  - php-mysql
-  - php-gd
-  - php-mcrypt
 
 runcmd:
   - rpm -i http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-13.ius.centos6.noarch.rpm
+  - yum install php54 php54-mysql php54-gd php54-mcrypt -y
   - yum update -y
   - chkconfig httpd on
   - chkconfig mysqld on
@@ -32,11 +29,11 @@ runcmd:
   - mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
   - mysql -e "DROP DATABASE test;"
   - mysql -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%'"
-  - mysql -e "UPDATE mysql.user SET Password=PASSWORD('super$ecurepasswd') WHERE User='root';"
+  - mysql -e "UPDATE mysql.user SET Password=PASSWORD('_supersecurepasswd_') WHERE User='root';"
   - mysql -e "flush privileges;"
   - echo '[client]' > /root/.my.cnf
   - echo 'user=root' >> /root/.my.cnf
-  - echo 'password=super$ecurepasswd' >> /root/.my.cnf
+  - echo 'password=_supersecurepasswd_' >> /root/.my.cnf
   - sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
   - sed -i 's/#Port 22/Port __ssh-port__/g' /etc/ssh/sshd_config
   - sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
@@ -93,19 +90,19 @@ runcmd:
   - service httpd start
 
 write_files:
--   encoding: ASCII
+-   encoding: text/plain
     content: |
        export PS1="[\u@\h \W \`if [ \$? = 0 ]; then echo \[\e[33m\]:\)\[\e[0m\]; else echo \[\e[31m\]:\(\[\e[0m\]; fi\`]\\$ "
     owner: root:root
     path: /etc/profile.d/ps.sh
     permissions: '0644'
--   encoding: ASCII
+-   encoding: text/plain
     content: |
        export resize='shopt -s checkwinsize;COLUMNS=$(tput cols);LINES=$(tput lines);export COLUMNS LINES;echo -e "COLUMNS=$COLUMNS;\nLINES=$LINES;\nexport COLUMNS LINES;"'
     owner: root:root
     path: /etc/profile.d/resize.sh
     permissions: '0644'
--   encoding: ASCII
+-   encoding: text/plain
     content: |
        #!/bin/bash
        
@@ -150,7 +147,7 @@ write_files:
     owner: root:root
     path: /usr/local/bin/dynmotd
     permissions: '0755'
--   encoding: ASCII
+-   encoding: text/plain
     content: |
        <VirtualHost *:80>
            ServerName wordpress.__DOMAIN__.com
@@ -164,9 +161,9 @@ write_files:
            </Directory>
        </VirtualHost>
     owner: root:root
-    path: /etc/httpd/vhost.d/wordpress.__DOMAIN__.com
+    path: /etc/httpd/vhost.d/wordpress.__DOMAIN__.com.conf
     permissions: '0644'
--   encoding: ASCII
+-   encoding: text/plain
     content: |
        <VirtualHost *:80>
            ServerName magento.__DOMAIN__.com
@@ -180,9 +177,9 @@ write_files:
            </Directory>
        </VirtualHost>
     owner: root:root
-    path: /etc/httpd/vhost.d/magento.__DOMAIN__.com
+    path: /etc/httpd/vhost.d/magento.__DOMAIN__.com.conf
     permissions: '0644'
--   encoding: ASCII
+-   encoding: text/plain
     content: |
        <VirtualHost *:80>
            ServerName rackspace.__DOMAIN__.com
@@ -196,5 +193,5 @@ write_files:
            </Directory>
        </VirtualHost>
     owner: root:root
-    path: /etc/httpd/vhost.d/rackspace.__DOMAIN__.com
+    path: /etc/httpd/vhost.d/rackspace.__DOMAIN__.com.conf
     permissions: '0644'

@@ -41,19 +41,19 @@ runcmd:
   - echo 'smtp_sasl_auth_enable = yes' >> /etc/postfix/main.cf
 
 write_files:
--   encoding: ASCII
+-   encoding: text/plain
     content: |
        export PS1="[\u@\h \W \`if [ \$? = 0 ]; then echo \[\e[33m\]:\)\[\e[0m\]; else echo \[\e[31m\]:\(\[\e[0m\]; fi\`]\\$ "
     owner: root:root
     path: /etc/profile.d/ps.sh
     permissions: '0644'
--   encoding: ASCII
+-   encoding: text/plain
     content: |
        export resize='shopt -s checkwinsize;COLUMNS=$(tput cols);LINES=$(tput lines);export COLUMNS LINES;echo -e "COLUMNS=$COLUMNS;\nLINES=$LINES;\nexport COLUMNS LINES;"'
     owner: root:root
     path: /etc/profile.d/resize.sh
     permissions: '0644'
--   encoding: ASCII
+-   encoding: text/plain
     content: |
        #!/bin/bash
        
