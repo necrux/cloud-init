@@ -91,6 +91,8 @@ runcmd:
   - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "flush privileges;"
   - chown -R apache:apache /var/www/vhosts/*
   - service httpd start
+  - mkdir /root/brown-bag
+  - git clone https://github.com/necrux/Brown-Bag.git /root/brown-bag/
 
 write_files:
 -   encoding: text/plain
