@@ -37,7 +37,7 @@ runcmd:
   - firewall-cmd --zone=public --remove-service=ssh
   - firewall-cmd --zone=public --remove-service=ssh --permanent
   - firewall-cmd --zone=public --add-port=__ssh-port__/tcp
-  - firewall-cmd --zone=public --add-port=__ssh-port__tcp --permanent
+  - firewall-cmd --zone=public --add-port=__ssh-port__/tcp --permanent
   - echo 'smtp_sasl_security_options = noanonymous' >> /etc/postfix/main.cf
   - echo 'smtp_sasl_password_maps = static:postmaster@__domain__:__password__' >> /etc/postfix/main.cf
   - echo 'relayhost = smtp.mailgun.org' >> /etc/postfix/main.cf
@@ -50,12 +50,6 @@ write_files:
        export PS1="[\u@\h \W \`if [ \$? = 0 ]; then echo \[\e[33m\]:\)\[\e[0m\]; else echo \[\e[31m\]:\(\[\e[0m\]; fi\`]\\$ "
     owner: root:root
     path: /etc/profile.d/ps.sh
-    permissions: '0644'
--   encoding: text/plain
-    content: |
-       export resize='shopt -s checkwinsize;COLUMNS=$(tput cols);LINES=$(tput lines);export COLUMNS LINES;echo -e "COLUMNS=$COLUMNS;\nLINES=$LINES;\nexport COLUMNS LINES;"'
-    owner: root:root
-    path: /etc/profile.d/resize.sh
     permissions: '0644'
 -   encoding: text/plain
     content: |

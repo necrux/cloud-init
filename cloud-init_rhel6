@@ -52,12 +52,6 @@ write_files:
     permissions: '0644'
 -   encoding: text/plain
     content: |
-       export resize='shopt -s checkwinsize;COLUMNS=$(tput cols);LINES=$(tput lines);export COLUMNS LINES;echo -e "COLUMNS=$COLUMNS;\nLINES=$LINES;\nexport COLUMNS LINES;"'
-    owner: root:root
-    path: /etc/profile.d/resize.sh
-    permissions: '0644'
--   encoding: text/plain
-    content: |
        #!/bin/bash
        
        black='\e[0;30m'
