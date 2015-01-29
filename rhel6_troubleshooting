@@ -76,6 +76,7 @@ runcmd:
   - tar zxf magento-1.9.0.1.tar.gz -C /var/www/vhosts/magento.__DOMAIN__.com/
   - mv /var/www/vhosts/magento.__DOMAIN__.com/magento/* /var/www/vhosts/magento.__DOMAIN__.com/
   - mv /var/www/vhosts/magento.__DOMAIN__.com/magento/.htaccess /var/www/vhosts/magento.__DOMAIN__.com/
+  - mv /var/www/vhosts/magento.__DOMAIN__.com/magento/.htaccess.sample /var/www/vhosts/magento.__DOMAIN__.com/
   - rmdir /var/www/vhosts/magento.__DOMAIN__.com/magento/
   - tar zxf magento-sample-data-1.9.0.0.tar.gz -C /var/www/vhosts/magento.__DOMAIN__.com/
   - mv /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/media/* /var/www/vhosts/magento.__DOMAIN__.com/ 
