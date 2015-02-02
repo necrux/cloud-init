@@ -69,34 +69,34 @@ runcmd:
   - echo 'Include vhost.d/*.conf' >> /etc/httpd/conf/httpd.conf
   - sed -i 's/^/#/' /etc/httpd/conf.d/welcome.conf
   - mkdir /etc/httpd/vhost.d/
-  - mkdir -p /var/www/vhosts/wordpress.__DOMAIN__.com/
+  - mkdir -p /var/www/vhosts/wordpress.__DOMAIN__/
   - wget https://wordpress.org/latest.tar.gz
-  - tar xzf latest.tar.gz -C /var/www/vhosts/wordpress.__DOMAIN__.com/
-  - mv /var/www/vhosts/wordpress.__DOMAIN__.com/wordpress/* /var/www/vhosts/wordpress.__DOMAIN__.com/
+  - tar xzf latest.tar.gz -C /var/www/vhosts/wordpress.__DOMAIN__/
+  - mv /var/www/vhosts/wordpress.__DOMAIN__/wordpress/* /var/www/vhosts/wordpress.__DOMAIN__/
   - rm -f latest.tar.gz
-  - mv wordpress/* /var/www/vhosts/wordpress.__DOMAIN__.com/
-  - rmdir /var/www/vhosts/wordpress.__DOMAIN__.com/wordpress/
+  - mv wordpress/* /var/www/vhosts/wordpress.__DOMAIN__/
+  - rmdir /var/www/vhosts/wordpress.__DOMAIN__/wordpress/
   - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "create database wordpress;"
   - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "grant all on wordpress.* to 'wordpress_user'@'localhost' identified by 'wordpress-lover';"
-  - mkdir -p /var/www/vhosts/magento.__DOMAIN__.com/
+  - mkdir -p /var/www/vhosts/magento.__DOMAIN__/
   - wget http://www.magentocommerce.com/downloads/assets/1.9.0.1/magento-1.9.0.1.tar.gz
   - wget http://www.magentocommerce.com/downloads/assets/1.9.0.0/magento-sample-data-1.9.0.0.tar.gz
-  - tar zxf magento-1.9.0.1.tar.gz -C /var/www/vhosts/magento.__DOMAIN__.com/
-  - mv /var/www/vhosts/magento.__DOMAIN__.com/magento/* /var/www/vhosts/magento.__DOMAIN__.com/
-  - mv /var/www/vhosts/magento.__DOMAIN__.com/magento/.htaccess /var/www/vhosts/magento.__DOMAIN__.com/
-  - mv /var/www/vhosts/magento.__DOMAIN__.com/magento/.htaccess.sample /var/www/vhosts/magento.__DOMAIN__.com/
-  - rmdir /var/www/vhosts/magento.__DOMAIN__.com/magento/
-  - tar zxf magento-sample-data-1.9.0.0.tar.gz -C /var/www/vhosts/magento.__DOMAIN__.com/
-  - mv /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/media/* /var/www/vhosts/magento.__DOMAIN__.com/ 
-  - mv /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/media/.htaccess /var/www/vhosts/magento.__DOMAIN__.com/media/ 
-  - mv /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/skin/* /var/www/vhosts/magento.__DOMAIN__.com/
+  - tar zxf magento-1.9.0.1.tar.gz -C /var/www/vhosts/magento.__DOMAIN__/
+  - mv /var/www/vhosts/magento.__DOMAIN__/magento/* /var/www/vhosts/magento.__DOMAIN__/
+  - mv /var/www/vhosts/magento.__DOMAIN__/magento/.htaccess /var/www/vhosts/magento.__DOMAIN__/
+  - mv /var/www/vhosts/magento.__DOMAIN__/magento/.htaccess.sample /var/www/vhosts/magento.__DOMAIN__/
+  - rmdir /var/www/vhosts/magento.__DOMAIN__/magento/
+  - tar zxf magento-sample-data-1.9.0.0.tar.gz -C /var/www/vhosts/magento.__DOMAIN__/
+  - mv /var/www/vhosts/magento.__DOMAIN__/magento-sample-data-1.9.0.0/media/* /var/www/vhosts/magento.__DOMAIN__/ 
+  - mv /var/www/vhosts/magento.__DOMAIN__/magento-sample-data-1.9.0.0/media/.htaccess /var/www/vhosts/magento.__DOMAIN__/media/ 
+  - mv /var/www/vhosts/magento.__DOMAIN__/magento-sample-data-1.9.0.0/skin/* /var/www/vhosts/magento.__DOMAIN__/
   - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "create database magento;"
   - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "grant all on magento.* to 'magento_user'@'localhost' identified by 'magento-lover';"
-  - cat /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/magento_sample_data_for_1.9.0.0.sql|mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) magento
-  - rm -rf /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/
-  - mkdir -p /var/www/vhosts/rackspace.__DOMAIN__.com/
+  - cat /var/www/vhosts/magento.__DOMAIN__/magento-sample-data-1.9.0.0/magento_sample_data_for_1.9.0.0.sql|mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) magento
+  - rm -rf /var/www/vhosts/magento.__DOMAIN__/magento-sample-data-1.9.0.0/
+  - mkdir -p /var/www/vhosts/rackspace.__DOMAIN__/
   - wget http://joomlacode.org/gf/download/frsrelease/19822/161255/Joomla_3.3.6-Stable-Full_Package.tar.gz
-  - tar zxf Joomla_3.3.6-Stable-Full_Package.tar.gz -C /var/www/vhosts/rackspace.__DOMAIN__.com/ 
+  - tar zxf Joomla_3.3.6-Stable-Full_Package.tar.gz -C /var/www/vhosts/rackspace.__DOMAIN__/ 
   - rm -f Joomla_3.3.6-Stable-Full_Package.tar.gz
   - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "create database rackspace;"
   - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "grant all on rackspace.* to 'rackspace_user'@'localhost' identified by 'joomla-lover';"
@@ -161,51 +161,51 @@ write_files:
 -   encoding: text/plain
     content: |
        <VirtualHost *:80>
-           ServerName wordpress.__DOMAIN__.com
-           ServerAlias www.wordpress.__DOMAIN__.com
-           DocumentRoot /var/www/vhosts/wordpress.__DOMAIN__.com
-           CustomLog /var/log/httpd/access_wordpress.__DOMAIN__.com.log combined
-           ErrorLog /var/log/httpd/error_wordpress.__DOMAIN__.com.log
-           <Directory /var/www/vhosts/wordpress.__DOMAIN__.com>
+           ServerName wordpress.__DOMAIN__
+           ServerAlias www.wordpress.__DOMAIN__
+           DocumentRoot /var/www/vhosts/wordpress.__DOMAIN__
+           CustomLog /var/log/httpd/access_wordpress.__DOMAIN__.log combined
+           ErrorLog /var/log/httpd/error_wordpress.__DOMAIN__.log
+           <Directory /var/www/vhosts/wordpress.__DOMAIN__>
                Options +FollowSymlinks -Indexes
                AllowOverride All
                Require all granted
            </Directory>
        </VirtualHost>
     owner: root:root
-    path: /etc/httpd/vhost.d/wordpress.__DOMAIN__.com.conf
+    path: /etc/httpd/vhost.d/wordpress.__DOMAIN__.conf
     permissions: '0644'
 -   encoding: text/plain
     content: |
        <VirtualHost *:80>
-           ServerName magento.__DOMAIN__.com
-           ServerAlias www.magento.__DOMAIN__.com
-           DocumentRoot /var/www/vhosts/magento.__DOMAIN__.com
-           CustomLog /var/log/httpd/access_magento.__DOMAIN__.com.log combined
-           ErrorLog /var/log/httpd/error_magento.__DOMAIN__.com.log
-           <Directory /var/www/vhosts/magento.__DOMAIN__.com>
+           ServerName magento.__DOMAIN__
+           ServerAlias www.magento.__DOMAIN__
+           DocumentRoot /var/www/vhosts/magento.__DOMAIN__
+           CustomLog /var/log/httpd/access_magento.__DOMAIN__.log combined
+           ErrorLog /var/log/httpd/error_magento.__DOMAIN__.log
+           <Directory /var/www/vhosts/magento.__DOMAIN__>
                Options +FollowSymlinks -Indexes
                AllowOverride All
                Require all granted
            </Directory>
        </VirtualHost>
     owner: root:root
-    path: /etc/httpd/vhost.d/magento.__DOMAIN__.com.conf
+    path: /etc/httpd/vhost.d/magento.__DOMAIN__.conf
     permissions: '0644'
 -   encoding: text/plain
     content: |
        <VirtualHost *:80>
-           ServerName rackspace.__DOMAIN__.com
-           ServerAlias www.rackspace.__DOMAIN__.com
-           DocumentRoot /var/www/vhosts/rackspace.__DOMAIN__.com
-           CustomLog /var/log/httpd/access_rackspace.__DOMAIN__.com.log combined
-           ErrorLog /var/log/httpd/error_rackspace.__DOMAIN__.com.log
-           <Directory /var/www/vhosts/rackspace.__DOMAIN__.com>
+           ServerName rackspace.__DOMAIN__
+           ServerAlias www.rackspace.__DOMAIN__
+           DocumentRoot /var/www/vhosts/rackspace.__DOMAIN__
+           CustomLog /var/log/httpd/access_rackspace.__DOMAIN__.log combined
+           ErrorLog /var/log/httpd/error_rackspace.__DOMAIN__.log
+           <Directory /var/www/vhosts/rackspace.__DOMAIN__>
                Options +FollowSymlinks -Indexes
                AllowOverride All
                Require all granted
            </Directory>
        </VirtualHost>
     owner: root:root
-    path: /etc/httpd/vhost.d/rackspace.__DOMAIN__.com.conf
+    path: /etc/httpd/vhost.d/rackspace.__DOMAIN__.conf
     permissions: '0644'
