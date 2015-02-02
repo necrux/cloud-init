@@ -96,8 +96,8 @@ runcmd:
   - rm -rf /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/
   - mkdir -p /var/www/vhosts/rackspace.__DOMAIN__.com/
   - wget http://joomlacode.org/gf/download/frsrelease/19822/161255/Joomla_3.3.6-Stable-Full_Package.tar.gz
-  - tar zxf Joomla_3.3.6-Stable-Update_Package.tar.gz -C /var/www/vhosts/rackspace.__DOMAIN__.com/ 
-  - rm -f Joomla_3.3.6-Stable-Update_Package.tar.gz
+  - tar zxf Joomla_3.3.6-Stable-Full_Package.tar.gz -C /var/www/vhosts/rackspace.__DOMAIN__.com/ 
+  - rm -f Joomla_3.3.6-Stable-Full_Package.tar.gz
   - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "create database rackspace;"
   - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "grant all on rackspace.* to 'rackspace_user'@'localhost' identified by 'joomla-lover';"
   - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "flush privileges;"
