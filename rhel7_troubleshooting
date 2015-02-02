@@ -15,7 +15,7 @@ packages:
   - vim
   - pwgen
   - telnet
-  - dig
+  - bind-utils
   - git 
   - httpd
   - mariadb-server

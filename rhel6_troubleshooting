@@ -11,11 +11,11 @@ users:
 
 packages:
   - man
-  - whois
+  - jwhois
   - vim
   - pwgen
   - telnet
-  - dig
+  - bind-utils
   - git 
   - httpd
   - mysql-server
