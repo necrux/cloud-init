@@ -19,10 +19,13 @@ packages:
   - git 
   - httpd
   - mysql-server
+  - screen
+  - zip
+  - unzip
 
 runcmd:
   - rpm -i http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-13.ius.centos6.noarch.rpm
-  - yum install php54 php54-mysql php54-gd php54-mcrypt php54-pecl-apc -y
+  - yum install php54 php54-mysql php54-gd php54-mcrypt php54-dom php54-pecl-apc -y
   - yum update -y
   - chkconfig httpd on
   - chkconfig mysqld on
@@ -51,6 +54,8 @@ runcmd:
   - echo '/usr/local/bin/dynmotd' >> /etc/profile
   - service sshd restart
   - service iptables restart
+  - iptables -I INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT
+  - service iptables save
   - echo 'smtp_sasl_security_options = noanonymous' >> /etc/postfix/main.cf
   - echo 'smtp_sasl_password_maps = static:postmaster@__domain__:__password__' >> /etc/postfix/main.cf
   - echo 'relayhost = smtp.mailgun.org' >> /etc/postfix/main.cf
@@ -87,7 +92,7 @@ runcmd:
   - cat /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/magento_sample_data_for_1.9.0.0.sql|mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) magento
   - rm -rf /var/www/vhosts/magento.__DOMAIN__.com/magento-sample-data-1.9.0.0/
   - mkdir -p /var/www/vhosts/rackspace.__DOMAIN__.com/
-  - wget http://joomlacode.org/gf/download/frsrelease/19823/161246/Joomla_3.3.6-Stable-Update_Package.tar.gz
+  - wget http://joomlacode.org/gf/download/frsrelease/19822/161255/Joomla_3.3.6-Stable-Full_Package.tar.gz
   - tar zxf Joomla_3.3.6-Stable-Update_Package.tar.gz -C /var/www/vhosts/rackspace.__DOMAIN__.com/ 
   - rm -f Joomla_3.3.6-Stable-Update_Package.tar.gz
   - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "create database rackspace;"

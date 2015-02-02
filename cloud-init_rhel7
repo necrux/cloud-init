@@ -17,6 +17,9 @@ packages:
   - git 
   - yum-cron
   - gcc
+  - screen
+  - zip
+  - unzip
 
 runcmd:
   - yum update -y
