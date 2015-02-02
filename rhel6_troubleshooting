@@ -71,7 +71,6 @@ runcmd:
   - tar xzf latest.tar.gz -C /var/www/vhosts/wordpress.__DOMAIN__/
   - mv /var/www/vhosts/wordpress.__DOMAIN__/wordpress/* /var/www/vhosts/wordpress.__DOMAIN__/
   - rm -f latest.tar.gz
-  - mv wordpress/* /var/www/vhosts/wordpress.__DOMAIN__/
   - rmdir /var/www/vhosts/wordpress.__DOMAIN__/wordpress/
   - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "create database wordpress;"
   - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "grant all on wordpress.* to 'wordpress_user'@'localhost' identified by 'wordpress-lover';"
@@ -104,14 +103,12 @@ runcmd:
   - git clone https://github.com/necrux/Brown-Bag.git /root/brown-bag/
 
 write_files:
--   encoding: text/plain
-    content: |
+-   content: |
        export PS1="[\u@\h \W \`if [ \$? = 0 ]; then echo \[\e[33m\]:\)\[\e[0m\]; else echo \[\e[31m\]:\(\[\e[0m\]; fi\`]\\$ "
     owner: root:root
     path: /etc/profile.d/ps.sh
     permissions: '0644'
--   encoding: text/plain
-    content: |
+-   content: |
        #!/bin/bash
        
        black='\e[0;30m'
@@ -155,8 +152,7 @@ write_files:
     owner: root:root
     path: /usr/local/bin/dynmotd
     permissions: '0755'
--   encoding: text/plain
-    content: |
+-   content: |
        <VirtualHost *:80>
            ServerName wordpress.__DOMAIN__
            ServerAlias www.wordpress.__DOMAIN__
@@ -171,8 +167,7 @@ write_files:
     owner: root:root
     path: /etc/httpd/vhost.d/wordpress.__DOMAIN__.conf
     permissions: '0644'
--   encoding: text/plain
-    content: |
+-   content: |
        <VirtualHost *:80>
            ServerName magento.__DOMAIN__
            ServerAlias www.magento.__DOMAIN__
@@ -187,8 +182,7 @@ write_files:
     owner: root:root
     path: /etc/httpd/vhost.d/magento.__DOMAIN__.conf
     permissions: '0644'
--   encoding: text/plain
-    content: |
+-   content: |
        <VirtualHost *:80>
            ServerName rackspace.__DOMAIN__
            ServerAlias www.rackspace.__DOMAIN__
