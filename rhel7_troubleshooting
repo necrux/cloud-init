@@ -27,12 +27,15 @@ packages:
   - screen
   - zip
   - unzip
+  - holland
+  - holland-mysqldump
 
 runcmd:
   - yum update -y
   - systemctl enable httpd.service
   - systemctl enable mariadb.service
   - systemctl start mariadb.service
+  - holland mk-config --name=default mysqldump
   - echo '[client]' > /root/.my.cnf
   - echo 'user=root' >> /root/.my.cnf
   - echo "password=$(pwgen -cv1 32)" >> /root/.my.cnf
