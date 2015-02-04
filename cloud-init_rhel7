@@ -48,14 +48,12 @@ runcmd:
   - systemctl restart postfix.service
 
 write_files:
--   encoding: text/plain
-    content: |
+-   content: |
        export PS1="[\u@\h \W \`if [ \$? = 0 ]; then echo \[\e[33m\]:\)\[\e[0m\]; else echo \[\e[31m\]:\(\[\e[0m\]; fi\`]\\$ "
     owner: root:root
     path: /etc/profile.d/ps.sh
     permissions: '0644'
--   encoding: text/plain
-    content: |
+-   content: |
        #!/bin/bash
        
        black='\e[0;30m'
@@ -88,7 +86,6 @@ write_files:
        $purple+  $lightgray Uptime $purple=$lightgreen $(uptime|awk -F',' '{print $1}'|awk -F'up ' '{print $2}')
        $purple+  $lightgray Total Memory $purple=$lightgreen $(free -m|awk '/Mem/ {print $2}') MB
        $purple+  $lightgray Available Memory $purple=$lightgreen $(free -m|awk '/-\/+/ {printf $4 " MB ("; used=$3} /Mem/ {total=$2} END {printf("%.1f\n", used/total*100)}')% used)
-       $purple+  $lightgray Current Runlevel $purple=$lightgreen $(runlevel|awk '{print $2}')
        $purple++++++++++++++++++:$lightgray User Data:$purple ++++++++++++++++++++
        $purple+  $lightgray Date $purple=$lightgreen $(date)
        $purple+  $lightgray Username $purple=$lightgreen $(whoami)
