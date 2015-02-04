@@ -105,7 +105,6 @@ runcmd:
   - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "grant all on rackspace.* to 'rackspace_user'@'localhost' identified by 'joomla-lover';"
   - mysql -uroot -p$(awk -F= '/password/ {print $2}' /root/.my.cnf) -e "flush privileges;"
   - chown -R apache:apache /var/www/vhosts/*
-  - systemctl start httpd.service
   - mkdir /root/brown-bag
   - git clone https://github.com/necrux/Brown-Bag.git /root/brown-bag/
 
