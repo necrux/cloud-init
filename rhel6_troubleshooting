@@ -1,11 +1,11 @@
 #cloud-config
 
 users:
- - name: __user__
+ - name: @USER@
    sudo: ALL=(ALL) NOPASSWD:ALL
    lock-passwd: false
    ssh-authorized-keys:
-      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCryHk9HafLVLhLgVZQBlqNS/gUNfO2lPGTCm+csDUDURz6G3cvlSQsYs4jf8yeRMGmoXM6pzpTyhuMeFiUwVbp6V9jvFSl0mQPARaa4eJWVhmdOThQ2/O5mXCIYbUMWR3XIbuTy4C8YchTnSOazmo8QU1GZ6J7mJzvT88v1hoZMaozWm5dv3KcdIeVvroFfcesDL6wU8qx36Y5UvSr8L1RvELNkf1O0/cP58ErtMzYkwrhNbtXXMulRipxTOFVq5Esqu+USFnNWTIYMxInMDiUNmVdKhG2qn1kbwyhnbHjY5I6ODV1MrsY2Ckeu8Mtq7X/xDYITICldsKRjryLhi+n
+      - @PUB-KEY@
  - name: dave
    lock-passwd: false
 
@@ -43,13 +43,13 @@ runcmd:
   - mysql -e "UPDATE mysql.user SET Password=PASSWORD('$(awk -F= '/password/ {print $2}' /root/.my.cnf)') WHERE User='root';"
   - mysql -e "flush privileges;"
   - sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
-  - sed -i 's/#Port 22/Port __ssh-port__/g' /etc/ssh/sshd_config
+  - sed -i 's/#Port 22/Port @SSH-PORT@/g' /etc/ssh/sshd_config
   - sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
   - sed -i 's/%wheel/#%wheel/g' /etc/sudoers
-  - sed -i 's/--dport 22/--dport __ssh-port__/' /etc/sysconfig/iptables
+  - sed -i 's/--dport 22/--dport @SSH-PORT@/' /etc/sysconfig/iptables
   - sed -i 's/HISTSIZE=1000/HISTSIZE=10000/' /etc/profile
   - echo $(pwgen -cv1 32)|passwd root --stdin
-  - echo $(pwgen -cv1 32)|passwd __user__ --stdin
+  - echo $(pwgen -cv1 32)|passwd @USER@ --stdin
   - echo $(pwgen -cv1 32)|passwd dave --stdin
   - curl -s "http://artii.herokuapp.com/make?text=$HOSTNAME&font=bubble__" > /etc/motd_hostname
   - echo >> /etc/motd_hostname
@@ -60,7 +60,7 @@ runcmd:
   - iptables -I INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT
   - service iptables save
   - echo 'smtp_sasl_security_options = noanonymous' >> /etc/postfix/main.cf
-  - echo 'smtp_sasl_password_maps = static:postmaster@__domain__:__password__' >> /etc/postfix/main.cf
+  - echo 'smtp_sasl_password_maps = static:postmaster@@DOMAIN@:@PASSWORD@' >> /etc/postfix/main.cf
   - echo 'relayhost = smtp.mailgun.org' >> /etc/postfix/main.cf
   - echo 'smtp_sasl_auth_enable = yes' >> /etc/postfix/main.cf
   - echo 'ServerName localhost' >> /etc/httpd/conf/httpd.conf
