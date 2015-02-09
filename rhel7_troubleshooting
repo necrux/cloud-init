@@ -162,8 +162,8 @@ write_files:
            ServerName wordpress.__DOMAIN__
            ServerAlias www.wordpress.__DOMAIN__
            DocumentRoot /var/www/vhosts/wordpress.__DOMAIN__
-           CustomLog /var/log/httpd/access_wordpress.__DOMAIN__.log combined
-           ErrorLog /var/log/httpd/error_wordpress.__DOMAIN__.log
+           CustomLog /var/log/httpd/wordpress.__DOMAIN___access.log combined
+           ErrorLog /var/log/httpd/wordpress.__DOMAIN___error.log
            <Directory /var/www/vhosts/wordpress.__DOMAIN__>
                Options +FollowSymlinks -Indexes
                AllowOverride All
@@ -178,8 +178,8 @@ write_files:
            ServerName magento.__DOMAIN__
            ServerAlias www.magento.__DOMAIN__
            DocumentRoot /var/www/vhosts/magento.__DOMAIN__
-           CustomLog /var/log/httpd/access_magento.__DOMAIN__.log combined
-           ErrorLog /var/log/httpd/error_magento.__DOMAIN__.log
+           CustomLog /var/log/httpd/magento.__DOMAIN___access.log combined
+           ErrorLog /var/log/httpd/magento.__DOMAIN___error.log
            <Directory /var/www/vhosts/magento.__DOMAIN__>
                Options +FollowSymlinks -Indexes
                AllowOverride All
@@ -194,8 +194,8 @@ write_files:
            ServerName rackspace.__DOMAIN__
            ServerAlias www.rackspace.__DOMAIN__
            DocumentRoot /var/www/vhosts/rackspace.__DOMAIN__
-           CustomLog /var/log/httpd/access_rackspace.__DOMAIN__.log combined
-           ErrorLog /var/log/httpd/error_rackspace.__DOMAIN__.log
+           CustomLog /var/log/httpd/rackspace.__DOMAIN___access.log combined
+           ErrorLog /var/log/httpd/rackspace.__DOMAIN___error.log
            <Directory /var/www/vhosts/rackspace.__DOMAIN__>
                Options +FollowSymlinks -Indexes
                AllowOverride All
