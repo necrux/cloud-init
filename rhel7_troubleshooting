@@ -48,6 +48,7 @@ runcmd:
   - mysql -e "flush privileges;"
   - sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
   - sed -i 's/#Port 22/Port @SSH-PORT@/g' /etc/ssh/sshd_config
+  - sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
   - sed -i 's/HISTSIZE=1000/HISTSIZE=10000/' /etc/profile
   - echo $(pwgen -cv1 32)|passwd root --stdin
   - echo $(pwgen -cv1 32)|passwd dave --stdin
