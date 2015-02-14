@@ -48,7 +48,6 @@ runcmd:
   - sed -i 's/--dport 22/--dport @SSH-PORT@/' /etc/sysconfig/iptables
   - sed -i 's/HISTSIZE=1000/HISTSIZE=10000/' /etc/profile
   - echo $(pwgen -cv1 32)|passwd root --stdin
-  - echo $(pwgen -cv1 32)|passwd @USER@ --stdin
   - echo $(pwgen -cv1 32)|passwd dave --stdin
   - curl -s "http://artii.herokuapp.com/make?text=$HOSTNAME&font=bubble__" > /etc/motd_hostname
   - echo >> /etc/motd_hostname
