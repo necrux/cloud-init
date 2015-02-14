@@ -4,6 +4,7 @@ users:
  - name: @USER@
    sudo: ALL=(ALL) NOPASSWD:ALL
    lock-passwd: false
+   passwd: @PASSWD@
    ssh-authorized-keys:
       - @PUB-KEY@
  - name: dave
@@ -47,8 +48,6 @@ runcmd:
   - mysql -e "flush privileges;"
   - sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
   - sed -i 's/#Port 22/Port @SSH-PORT@/g' /etc/ssh/sshd_config
-  - sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
-  - sed -i 's/%wheel/#%wheel/g' /etc/sudoers
   - sed -i 's/HISTSIZE=1000/HISTSIZE=10000/' /etc/profile
   - echo $(pwgen -cv1 32)|passwd root --stdin
   - echo $(pwgen -cv1 32)|passwd @USER@ --stdin
@@ -65,7 +64,7 @@ runcmd:
   - firewall-cmd --zone=public --add-service=http
   - firewall-cmd --zone=public --add-service=http --permanent
   - echo 'smtp_sasl_security_options = noanonymous' >> /etc/postfix/main.cf
-  - echo 'smtp_sasl_password_maps = static:postmaster@@DOMAIN@:@PASSWORD@' >> /etc/postfix/main.cf
+  - echo 'smtp_sasl_password_maps = static:postmaster@@DOMAIN@:@MAIL-PASSWD@' >> /etc/postfix/main.cf
   - echo 'relayhost = smtp.mailgun.org' >> /etc/postfix/main.cf
   - echo 'smtp_sasl_auth_enable = yes' >> /etc/postfix/main.cf
   - echo 'ServerName localhost' >> /etc/httpd/conf/httpd.conf
