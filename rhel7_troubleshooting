@@ -4,7 +4,6 @@ users:
  - name: @USER@
    sudo: ALL=(ALL) NOPASSWD:ALL
    lock-passwd: false
-   passwd: @PASSWD@
    ssh-authorized-keys:
       - @PUB-KEY@
  - name: dave
@@ -51,6 +50,7 @@ runcmd:
   - sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
   - sed -i 's/HISTSIZE=1000/HISTSIZE=10000/' /etc/profile
   - echo $(pwgen -cv1 32)|passwd root --stdin
+  - echo $(pwgen -cv1 32)|passwd @USER@ --stdin
   - echo $(pwgen -cv1 32)|passwd dave --stdin
   - curl -s "http://artii.herokuapp.com/make?text=$HOSTNAME&font=bubble__" > /etc/motd_hostname
   - echo >> /etc/motd_hostname
